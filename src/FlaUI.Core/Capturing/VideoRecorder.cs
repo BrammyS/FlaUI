@@ -110,7 +110,10 @@ namespace FlaUI.Core.Capturing
                 catch (Exception ex)
                 {
                     Logger.Default.Error($"Error while recording video \"{Path.GetFileName(TargetVideoPath)}\".", ex);
-                    await Task.Delay(frameInterval);
+                    if (_shouldRecord)
+                    {
+                        await Task.Delay(frameInterval);
+                    }
                 }
             }
 
