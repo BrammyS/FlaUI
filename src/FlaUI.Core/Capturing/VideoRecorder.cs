@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.IO.Pipes;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FlaUI.Core.Capturing
