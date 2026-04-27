@@ -213,8 +213,18 @@ namespace FlaUI.Core.Capturing
         {
             _shouldRecord = true;
             _recordStartTime = DateTime.UtcNow;
-            _recordTask = Task.Factory.StartNew(RecordLoopAsync, TaskCreationOptions.LongRunning).Unwrap();
-            _writeTask = Task.Factory.StartNew(WriteLoopAsync, TaskCreationOptions.LongRunning).Unwrap();
+            _recordTask = Task.Factory.StartNew(
+                RecordLoopAsync,
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default
+            ).Unwrap();
+            _writeTask = Task.Factory.StartNew(
+                WriteLoopAsync,
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default
+            ).Unwrap();
         }
 
         /// <summary>
