@@ -1,4 +1,4 @@
-﻿using FlaUI.Core.Logging;
+using FlaUI.Core.Logging;
 using FlaUI.Core.Tools;
 using System;
 using System.Collections.Concurrent;
@@ -174,8 +174,18 @@ namespace FlaUI.Core.Capturing
                             ? $"-c:v libx264 -crf {_settings.VideoQuality} -pix_fmt yuv420p -preset ultrafast"
                             : $"-c:v libxvid -qscale:v {_settings.VideoQuality}";
                         var videoOutArgs = $"{videouOutCodec} -r {_settings.FrameRate} -vf \"scale={img.Width.Even()}:{img.Height.Even()}\"";
-                        ffmpegProcess = StartFFMpeg(_settings.ffmpegPath, $"-y -hide_banner -loglevel warning {videoInArgs} {videoOutArgs} \"{TargetVideoPath}\"");
-                        await ffmpegIn.WaitForConnectionAsync();
+
+                        try
+                        {
+                            ffmpegProcess = StartFFMpeg(_settings.ffmpegPath, $"-y -hide_banner -loglevel warning {videoInArgs} {videoOutArgs} \"{TargetVideoPath}\"");
+                            await ffmpegIn.WaitForConnectionAsync();
+                        }
+                        catch (Exception _)
+                        {
+                            ffmpegProcess?.Dispose();
+                            throw;
+                        }
+
                         isFirstFrame = false;
                     }
 
